@@ -1,10 +1,40 @@
 #include "compute.h"
-#include "vector.h"
 
-#include <gtk/gtk.h>
 #include <stddef.h>
 #include <stdio.h>
 #include <time.h>
+
+#include "image.h"
+#include "vector.h"
+
+float get_cloud_proportion(struct img img)
+{
+    float cloudProportion = 0;
+
+    vector_t v =
+        get_vector(img, (struct point){ img.width / 2, img.height / 2 });
+    printf("v:%d,%d,%d,%d,%d\n", v[0], v[1], v[2], v[3], v[4]);
+
+    vector_t max = set_vector(VECTOR_MAX_VALUE);
+    // 1. choice of the number of classes
+    size_t nbClass = 2;
+    // 2. inilization of the mass centers V(0) of the k classes omega(j)
+    vector_t mass_center_j = set_vector(0);
+    vector_t mass_center_cloud = set_vector(0);
+
+    puts("start the loop");
+
+    // 3. at step i, if V(i) is the nearest center of vector Vs
+    // the pixel s described by Vs is classified in class omega(j)
+    for (size_t y = 0; y < img.height; y++) {
+        for (size_t x = 0; x < img.width; x++) {
+            vector_t i = get_vector(img, (struct point){ x, y });
+            printf("s:%d,%d,%d,%d,%d\n", i[0], i[1], i[2], i[3], i[4]);
+        }
+    }
+
+    return cloudProportion;
+}
 
 void rgb_to_grayscale(guchar *srcImg, guchar *dstImg, size_t nbPixels)
 {
@@ -17,47 +47,15 @@ void rgb_to_grayscale(guchar *srcImg, guchar *dstImg, size_t nbPixels)
     }
 }
 
-float get_cloud_proportion(struct img img)
-{
-    float cloudProportion = 0;
-
-    vector_t v = get_vector(img, (struct point){img.width / 2, img.height / 2});
-    printf("v:%d,%d,%d,%d,%d\n", v[0], v[1], v[2], v[3], v[4]);
-
-
-    vector_t max = set_vector(V_MAX_VALUE);
-    // 1. choice of the number of classes
-    size_t nbClass = 2;
-    // 2. inilization of the mass centers V(0) of the k classes omega(j)
-    vector_t mass_center_j = set_vector(0);
-    vector_t mass_center_cloud = set_vector(0);
-
-    printf("start the loop\n");
-
-    // 3. at step i, if V(i) is the nearest center of vector Vs
-    // the pixel s described by Vs is classified in class omega(j)
-    for (size_t y = 0; y < img.height; y++)
-    {
-        for (size_t x = 0; x < img.width; x++)
-        {
-            vector_t i = get_vector(img, (struct point){x, y});
-            printf("s:%d,%d,%d,%d,%d\n", i[0], i[1], i[2], i[3], i[4]);
-        }
-    }
-
-
-    return cloudProportion;
-}
-
 void ComputeImage(guchar *srcImg, guint height, guint width, guchar *dstImg)
 {
-    puts(__func__);
     clock_t startClock = clock();
 
     size_t nbPixels = width * height;
     rgb_to_grayscale(srcImg, dstImg, nbPixels);
 
-    float cloudProportion = get_cloud_proportion((struct img){dstImg, width, height});
+    float cloudProportion =
+        get_cloud_proportion((struct img){ dstImg, width, height });
 
     printf("le pourcentage de nuages trouvé sur l’image: %f%%\n",
            cloudProportion);

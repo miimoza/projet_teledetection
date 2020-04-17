@@ -1,7 +1,6 @@
 #include "image.h"
-#include "err.h"
 
-#include <stdio.h>
+#include <err.h>
 
 unsigned char get_pixel_value(struct img img, struct point p)
 {

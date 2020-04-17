@@ -1,10 +1,11 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#define V_MAX_VALUE 255
-#define VECTOR_SIZE 5
-
 #include "compute.h"
+#include "image.h"
+
+#define VECTOR_MAX_VALUE 255
+#define VECTOR_SIZE 5
 
 typedef unsigned char *vector_t;
 

@@ -5,15 +5,13 @@
 
 #define RGB_NB_CHANNELS 3
 
-struct img
-{
+struct img {
     unsigned char *mat;
     size_t width;
     size_t height;
 };
 
-struct point
-{
+struct point {
     size_t x;
     size_t y;
 };

@@ -1,34 +1,30 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <gtk/gtk.h>
 #include <math.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 #include "compute.h"
 
 /*---------------------------------------
-  Proto:
-       void ShowImaOrig(GtkButton *button_ok,
-  		        GtkWidget **ppwTabArgs)
-
-  But: creer et afficher l'image originale dont le nom est
-       contenu dans un FileSelection
-
-  Entree: --->le button OK du FileSelection
-          --->un tableau de Widgets avec :
-	  case 0: le GtkFileSelection contenant le nom du fichier image
-	  case 1: le GtkImage pour l'image originale et initialisee
-	  lors de l'appel de la fonction ShowImaOrig
-	  case 2 : la fenetre principale
-	  case 3: le tableau ou est dessine l'image originale
-	  case 4: le tableau ou est dessinee l'image resultat
-	  case 5: le GtkImage pour l'image originale et initialisee
-	  lors de l'appel de la fonction ShowImaComputed
-
-  Sortie:
-
-  Rem:
-
-  Voir aussi:
-
+    Proto:
+        void ShowImaOrig(GtkButton *button_ok, GtkWidget **ppwTabArgs)
+    But:
+        creer et afficher l'image originale dont le nom est
+        contenu dans un FileSelection
+    Entree:
+        --->le button OK du FileSelection
+        --->un tableau de Widgets avec :
+        case 0: le GtkFileSelection contenant le nom du fichier image
+        case 1: le GtkImage pour l'image originale et initialisee
+        lors de l'appel de la fonction ShowImaOrig
+        case 2 : la fenetre principale
+        case 3: le tableau ou est dessine l'image originale
+        case 4: le tableau ou est dessinee l'image resultat
+        case 5: le GtkImage pour l'image originale et initialisee
+        lors de l'appel de la fonction ShowImaComputed
+    Sortie:
+    Rem:
+    Voir aussi:
  ---------------------------------------*/
 void ShowImaOrig(__attribute__((unused)) GtkButton *button_ok,
                  GtkWidget **ppwTabArgs)
