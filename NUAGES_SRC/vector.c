@@ -37,15 +37,26 @@ vector_t get_vector(struct image img, struct point p)
     return v;
 }
 
-vector_t set_vector(unsigned char value)
+vector_t set_vector(unsigned char v0, unsigned char v1, unsigned char v2,
+                    unsigned char v3, unsigned char v4)
 {
     vector_t v = malloc(sizeof(unsigned char) * VECTOR_SIZE);
 
-    v[0] = value;
-    v[1] = value;
-    v[2] = value;
-    v[3] = value;
-    v[4] = value;
+    v[0] = v0;
+    v[1] = v1;
+    v[2] = v2;
+    v[3] = v3;
+    v[4] = v4;
+
+    return v;
+}
+
+vector_t set_homogeneous_vector(unsigned char value)
+{
+    vector_t v = malloc(sizeof(unsigned char) * VECTOR_SIZE);
+
+    for (size_t i = 0; i < VECTOR_SIZE; i++)
+        v[i] = value;
 
     return v;
 }

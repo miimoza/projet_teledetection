@@ -15,12 +15,12 @@ float get_cloud_proportion(struct image img)
         get_vector(img, (struct point){ img.width / 2, img.height / 2 });
     printf("v:%d,%d,%d,%d,%d\n", v[0], v[1], v[2], v[3], v[4]);
 
-    vector_t max = set_vector(VECTOR_MAX_VALUE);
+    vector_t max = set_homogeneous_vector(VECTOR_MAX_VALUE);
     // 1. choice of the number of classes
     size_t nbClass = 2;
     // 2. inilization of the mass centers V(0) of the k classes omega(j)
-    vector_t mass_center_j = set_vector(0);
-    vector_t mass_center_cloud = set_vector(0);
+    vector_t mass_center_j = set_homogeneous_vector(0);
+    vector_t mass_center_cloud = set_homogeneous_vector(0);
 
     puts("start the loop");
 
