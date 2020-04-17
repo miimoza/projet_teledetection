@@ -1,40 +1,43 @@
-#include <stdio.h>
+#include "compute.h"
+
 #include <gtk/gtk.h>
+#include <stddef.h>
+#include <stdio.h>
+#include <time.h>
 
-/*---------------------------------------
-    Proto:
-    But:
-    Entrees:
-        --->le tableau des valeurs des pixels de l'image d'origine
-        (les lignes sont mises les unes � la suite des autres)
-        --->le nombre de lignes de l'image,
-        --->le nombre de colonnes de l'image,
-        --->le tableau des valeurs des pixels de l'image resultat
-        (les lignes sont mises les unes � la suite des autres)
-    Sortie:
-    Rem:
-    Voir aussi:
----------------------------------------*/
-
-void ComputeImage(guchar *pucImaOrig, int NbLine, int NbCol, guchar *pucImaRes)
+void ComputeImage(guchar *srcImg, guint height, guint width, guchar *dstImg)
 {
-    int iNbPixelsTotal, iNumPix;
-    int iNumChannel, iNbChannels = 3; // on travaille sur des images couleurs
-    guchar ucMeanPix;
+    puts(__func__);
+    clock_t startClock = clock();
 
-    printf("Segmentation de l'image.... A vous!\n");
+    size_t nbPixels = width * height;
 
-    iNbPixelsTotal = NbCol * NbLine;
-    for (iNumPix = 0; iNumPix < iNbPixelsTotal * iNbChannels;
-         iNumPix = iNumPix + iNbChannels) {
-        /* moyenne sur les composantes RVB */
-        ucMeanPix = (unsigned char)((*(pucImaOrig + iNumPix) +
-                                     *(pucImaOrig + iNumPix + 1) +
-                                     *(pucImaOrig + iNumPix + 2)) /
-                                    3);
-
-        /* sauvegarde du resultat */
-        for (iNumChannel = 0; iNumChannel < iNbChannels; iNumChannel++)
-            *(pucImaRes + iNumPix + iNumChannel) = ucMeanPix;
+    // grayscale
+    for (size_t i = 0; i < nbPixels * RGB_NB_CHANNELS; i += RGB_NB_CHANNELS) {
+        guchar rgbAverage =
+            ((*(srcImg + i) + *(srcImg + i + 1) + *(srcImg + i + 2)) / 3);
+        for (size_t channel = 0; channel < RGB_NB_CHANNELS; channel++)
+            *(dstImg + i + channel) = rgbAverage;
     }
+
+    float cloudProportion = 0;
+
+#if 0
+    vector_t max = { V_MAX_VALUE };
+    // 1. choice of the number of classes
+    size_t nbClass = 0;
+    // 2. inilization of the mass centers V(0) of the k classes omega(j)
+    size_t mass_centers = 0;
+    for (size_t i = 0; 0; i++) {
+        // 3. at step i, if V(i) is the nearest center of vector Vs
+        // the pixel s described by Vs is classified in class omega(j)
+        vector_t s = { 0 };
+    }
+#endif
+
+    printf("le pourcentage de nuages trouvé sur l’image: %f%%\n",
+           cloudProportion);
+
+    printf("le temps de calcul pour traiter cette image: %fms\n",
+           (double)(clock() - startClock));
 }

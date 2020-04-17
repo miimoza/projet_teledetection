@@ -30,7 +30,8 @@
   Voir aussi:
 
  ---------------------------------------*/
-void ShowImaOrig(GtkButton *button_ok, GtkWidget **ppwTabArgs)
+void ShowImaOrig(__attribute__((unused)) GtkButton *button_ok,
+                 GtkWidget **ppwTabArgs)
 {
     GtkFileSelection *pfsOpenFile;
     gchar *pcFileName;
@@ -91,7 +92,8 @@ void ShowImaOrig(GtkButton *button_ok, GtkWidget **ppwTabArgs)
   Voir aussi: la fonction ComputeImage dans compute.c
 
  ---------------------------------------*/
-void ShowImaComputed(GtkObject *button_analyse, GtkWidget **ppwTabArgs)
+void ShowImaComputed(__attribute__((unused)) GtkObject *button_analyse,
+                     GtkWidget **ppwTabArgs)
 {
     int NbCol, NbLine;
     guchar *pucImaOrig, *pucImaRes;
