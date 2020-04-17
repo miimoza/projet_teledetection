@@ -3,7 +3,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-vector_t get_vector(struct img img, struct point p)
+vector_t get_vector(struct image img, struct point p)
 {
     vector_t v = malloc(sizeof(unsigned char) * VECTOR_SIZE);
 

@@ -9,7 +9,7 @@
 
 typedef unsigned char *vector_t;
 
-vector_t get_vector(struct img img, struct point p);
+vector_t get_vector(struct image img, struct point p);
 vector_t set_vector(unsigned char value);
 void sort_array(vector_t v);
 

@@ -7,7 +7,7 @@
 #include "image.h"
 #include "vector.h"
 
-float get_cloud_proportion(struct img img)
+float get_cloud_proportion(struct image img)
 {
     float cloudProportion = 0;
 
@@ -54,8 +54,8 @@ void ComputeImage(guchar *srcImg, guint height, guint width, guchar *dstImg)
     size_t nbPixels = width * height;
     rgb_to_grayscale(srcImg, dstImg, nbPixels);
 
-    float cloudProportion =
-        get_cloud_proportion((struct img){ dstImg, width, height });
+    float cloudProportion = get_cloud_proportion(
+        (struct image){ dstImg, width, height, RGB_NB_CHANNELS });
 
     printf("le pourcentage de nuages trouvé sur l’image: %f%%\n",
            cloudProportion);
