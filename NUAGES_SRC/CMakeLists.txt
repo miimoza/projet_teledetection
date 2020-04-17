@@ -12,6 +12,8 @@ set(CMAKE_C_STANDARD 99)
 add_executable(imaProjet.exe
     main.c
     compute.c
+    vector.c
+    image.c
 )
 
 # libs
