@@ -45,6 +45,8 @@ float get_cloud_proportion(struct image img)
              get_vector_proximity(classC.massCenter, massCenterCHold) >=
                  STABILITY_THRESHOLD);
 
+    free(massCenterJHold);
+    free(massCenterCHold);
     free_class(classJ);
     free_class(classC);
 
@@ -73,6 +75,6 @@ void ComputeImage(guchar *srcImg, guint height, guint width, guchar *dstImg)
 
     size_t time_elapsed = ((clock_t) clock() - startClock) / (CLOCKS_PER_SEC / 1000);
 
-    printf("Cloud Proportion: %f%% | Time Elpased: %lds%03ldms\n", cloudProportion * 100,
+    printf("\t--> Cloud Proportion: %f%% (Time Elpased: %lds%03ldms)\n", cloudProportion * 100,
           time_elapsed / 1000, time_elapsed % 1000);
 }

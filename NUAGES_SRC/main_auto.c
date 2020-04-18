@@ -37,7 +37,7 @@ int main(void)
             dir = opendir(dirname);
             if (dir == NULL)
             {
-                printf("Could not open current directory" ); /* Sommet */
+                printf("Could not open directory\n" ); /* Sommet */
                 return 0;
             }
         }
@@ -55,7 +55,7 @@ int main(void)
         strcat(buf, entry->d_name);
         realpath(buf, path);
 
-        printf("Generating Cloud Probabi  %s:\n", entry->d_name);
+        printf("Estimating cloud cover of optical satellite image %s:\n", entry->d_name);
         compute_image(path);
     }
 

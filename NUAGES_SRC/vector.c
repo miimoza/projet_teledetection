@@ -110,6 +110,7 @@ void free_class(struct class c)
 {
     for (size_t i = 0; i < c.size; i++)
         free(c.vectors[i]);
-    free(c.vectors);
+    if (c.size > 0)
+        free(c.vectors);
     free(c.massCenter);
 }
