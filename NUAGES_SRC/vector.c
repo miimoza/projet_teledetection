@@ -1,7 +1,9 @@
 #include "vector.h"
 
 #include <stdbool.h>
-#include <stddef.h>
+#include <stdlib.h>
+
+#include <stdio.h>
 
 vector_t get_vector(struct image img, struct point p)
 {
@@ -32,9 +34,37 @@ vector_t get_vector(struct image img, struct point p)
         v[4] = (b4) ? avg : v[4];
     }
 
-    sort_array(v);
+    sort_vector(v);
 
     return v;
+}
+
+size_t get_vector_value(vector_t v)
+{
+    size_t ret = 0;
+    for (size_t i = 0; i < VECTOR_SIZE; i++) {
+        ret += v[i];
+    }
+    return ret;
+}
+
+int get_vector_proximity(vector_t mass_center, vector_t v)
+{
+    int ret = get_vector_value(mass_center) - get_vector_value(v);
+    return (ret > 0) ? ret : -ret;
+}
+
+static int compare_vectors(const void *v0, const void *v1)
+{
+    return get_vector_value(*(vector_t *)v0) -
+           get_vector_value(*(vector_t *)v1);
+}
+
+vector_t get_class_median(struct class class)
+{
+    qsort(class.vectors, class.size, sizeof(vector_t), compare_vectors);
+
+    return class.vectors[class.size / 2];
 }
 
 vector_t set_vector(unsigned char v0, unsigned char v1, unsigned char v2,
@@ -61,17 +91,12 @@ vector_t set_homogeneous_vector(unsigned char value)
     return v;
 }
 
-void sort_array(vector_t v)
+static int compare_uchar(const void *uc0, const void *uc1)
 {
-    size_t size = VECTOR_SIZE;
+    return (*(unsigned char *)uc1) - (*(unsigned char *)uc0);
+}
 
-    for (size_t i = 0; i < size - 1; i++) {
-        for (size_t j = 0; j < size - i - 1; j++) {
-            if (v[j] <= v[j + 1]) {
-                unsigned char tmp = v[j];
-                v[j] = v[j + 1];
-                v[j + 1] = tmp;
-            }
-        }
-    }
+void sort_vector(vector_t v)
+{
+    qsort(v, VECTOR_SIZE, sizeof(unsigned char), compare_uchar);
 }

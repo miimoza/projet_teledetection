@@ -16,6 +16,13 @@ add_executable(imaProjet.exe
     image.c
 )
 
+add_executable(imaProjet_auto.exe
+    main_auto.c
+    compute.c
+    vector.c
+    image.c
+)
+
 # libs
 add_definitions(${GTK2_CFLAGS_OTHER})
 find_package(PkgConfig REQUIRED)
