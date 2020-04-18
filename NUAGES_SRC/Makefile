@@ -1,4 +1,4 @@
-EXEC=imaProjet.exe
+EXEC=imaProjet_auto.exe
 DIR=EXE
 
 .PHONY: all, check, clean

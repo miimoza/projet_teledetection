@@ -9,26 +9,13 @@
 
 float get_cloud_proportion(struct image img)
 {
-    vector_t v =
-        get_vector(img, (struct point){ img.width / 2, img.height / 2 });
-    printf("v:%d,%d,%d,%d,%d\n", v[0], v[1], v[2], v[3], v[4]);
-
-    vector_t max = set_homogeneous_vector(VECTOR_MAX_VALUE);
-    // 1. choice of the number of classes
-    size_t nbClassK = 2;
-    // 2. inilization of the mass centers V(0) of the k classes omega(j)
     struct class classJ = { set_homogeneous_vector(0), NULL, 0 };
     struct class classC = { set_homogeneous_vector(VECTOR_MAX_VALUE), NULL, 0 };
 
-    puts("start the loop");
-
-    // 3. at iteration i, the pixels with a radiometric value Vs
-    // is a member of class ωj if mj is the nearest mass center from Vs
-
     vector_t massCenterJHold, massCenterCHold;
     do {
-        massCenterJHold = classJ.massCenter;
-        massCenterCHold = classC.massCenter;
+        massCenterJHold = copy_vector(classJ.massCenter);
+        massCenterCHold = copy_vector(classC.massCenter);
 
         classJ.size = 0;
         classC.size = 0;
@@ -48,24 +35,8 @@ float get_cloud_proportion(struct image img)
                                              ++classC.size * sizeof(vector_t));
                     classC.vectors[classC.size - 1] = v;
                 }
-
-                printf("s:%d,%d,%d,%d,%d\n", v[0], v[1], v[2], v[3], v[4]);
             }
         }
-        // 4. when all the pixels are classified,
-        // the new mass centers mj(i + 1) are computed
-        printf("CLASSJ:%d,%d,%d,%d,%d\n", classJ.massCenter[0],
-               classJ.massCenter[1], classJ.massCenter[2], classJ.massCenter[3],
-               classJ.massCenter[4]);
-        printf("CLASSJH:%d,%d,%d,%d,%d\n", massCenterJHold[0],
-               massCenterJHold[1], massCenterJHold[2], massCenterJHold[3],
-               massCenterJHold[4]);
-        printf("CLASSC:%d,%d,%d,%d,%d\n", classC.massCenter[0],
-               classC.massCenter[1], classC.massCenter[2], classC.massCenter[3],
-               classC.massCenter[4]);
-        printf("CLASSCH:%d,%d,%d,%d,%d\n", massCenterCHold[0],
-               massCenterCHold[1], massCenterCHold[2], massCenterCHold[3],
-               massCenterCHold[4]);
 
         classJ.massCenter = get_class_median(classJ);
         classC.massCenter = get_class_median(classC);
@@ -73,6 +44,9 @@ float get_cloud_proportion(struct image img)
                  STABILITY_THRESHOLD &&
              get_vector_proximity(classC.massCenter, massCenterCHold) >=
                  STABILITY_THRESHOLD);
+
+    free_class(classJ);
+    free_class(classC);
 
     return (float)classC.size / ((float)classC.size + (float)classJ.size);
 }
@@ -92,14 +66,13 @@ void ComputeImage(guchar *srcImg, guint height, guint width, guchar *dstImg)
 {
     clock_t startClock = clock();
 
-    size_t nbPixels = width * height;
-    rgb_to_grayscale(srcImg, dstImg, nbPixels);
+    rgb_to_grayscale(srcImg, dstImg, width * height);
 
     float cloudProportion = get_cloud_proportion(
         (struct image){ dstImg, width, height, RGB_NB_CHANNELS });
 
-    printf("le pourcentage de nuages trouvé sur l’image: %f%%\n",
-           cloudProportion * 100);
-    printf("le temps de calcul pour traiter cette image: %fms\n",
-           (double)(clock() - startClock));
+    size_t time_elapsed = ((clock_t) clock() - startClock) / (CLOCKS_PER_SEC / 1000);
+
+    printf("Cloud Proportion: %f%% | Time Elpased: %lds%03ldms\n", cloudProportion * 100,
+          time_elapsed / 1000, time_elapsed % 1000);
 }

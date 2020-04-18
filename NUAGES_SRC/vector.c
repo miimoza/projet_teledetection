@@ -64,7 +64,12 @@ vector_t get_class_median(struct class class)
 {
     qsort(class.vectors, class.size, sizeof(vector_t), compare_vectors);
 
-    return class.vectors[class.size / 2];
+    return copy_vector(class.vectors[class.size / 2]);
+}
+
+vector_t copy_vector(vector_t v)
+{
+    return set_vector(v[0], v[1], v[2], v[3], v[4]);
 }
 
 vector_t set_vector(unsigned char v0, unsigned char v1, unsigned char v2,
@@ -99,4 +104,12 @@ static int compare_uchar(const void *uc0, const void *uc1)
 void sort_vector(vector_t v)
 {
     qsort(v, VECTOR_SIZE, sizeof(unsigned char), compare_uchar);
+}
+
+void free_class(struct class c)
+{
+    for (size_t i = 0; i < c.size; i++)
+        free(c.vectors[i]);
+    free(c.vectors);
+    free(c.massCenter);
 }

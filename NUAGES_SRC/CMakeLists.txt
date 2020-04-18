@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8)
 project(nuagesDetection)
 
 # compilations
-set(CMAKE_C_FLAGS "-Wall -Wextra -Wno-deprecated-declarations -pedantic")
+set(CMAKE_C_FLAGS "-Wall -Wextra -Wno-deprecated-declarations -pedantic -g")
 set(CMAKE_C_STANDARD 99)
 
 # sources
@@ -30,3 +30,4 @@ PKG_CHECK_MODULES(GTK2 REQUIRED gtk+-2.0)
 include_directories(${GTK2_INCLUDE_DIRS})
 link_directories(${GTK2_LIBRARY_DIRS})
 target_link_libraries(imaProjet.exe ${GTK2_LIBRARIES})
+target_link_libraries(imaProjet_auto.exe ${GTK2_LIBRARIES})
