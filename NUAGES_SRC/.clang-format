@@ -1,13 +1,4 @@
 # SPDX-License-Identifier: GPL-2.0
-#
-# clang-format configuration file. Intended for clang-format >= 4.
-#
-# For more information, see:
-#
-#   Documentation/process/clang-format.rst
-#   https://clang.llvm.org/docs/ClangFormat.html
-#   https://clang.llvm.org/docs/ClangFormatStyleOptions.html
-#
 ---
 AccessModifierOffset: -4
 AlignAfterOpenBracket: Align
@@ -64,10 +55,12 @@ DisableFormat: false
 ExperimentalAutoDetectBinPacking: false
 #FixNamespaceComments: false # Unknown to clang-format-4.0
 
-#IncludeBlocks: Preserve # Unknown to clang-format-5.0
+IncludeBlocks: Regroup # Unknown to clang-format-5.0
 IncludeCategories:
-  - Regex: '.*'
+  - Regex: '<.*>'
     Priority: 1
+  - Regex: '.*'
+    Priority: 2
 IncludeIsMainRegex: '(Test)?$'
 IndentCaseLabels: false
 #IndentPPDirectives: None # Unknown to clang-format-5.0
@@ -96,7 +89,7 @@ PenaltyReturnTypeOnItsOwnLine: 60
 
 PointerAlignment: Right
 ReflowComments: false
-SortIncludes: false
+SortIncludes: true
 #SortUsingDeclarations: false # Unknown to clang-format-4.0
 SpaceAfterCStyleCast: false
 SpaceAfterTemplateKeyword: true
