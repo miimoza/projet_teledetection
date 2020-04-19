@@ -49,6 +49,11 @@ float get_cloud_proportion(struct image img)
     float proportion =
         (float)classC.size / ((float)classC.size + (float)classJ.size);
 
+    for (size_t i = 0; i < classC.size; i++) {
+        struct color cloud_color = { .r = 0, .g = 255, .b = 0 };
+        set_pixel_value(img, classC.nodes[i].point, cloud_color);
+    }
+
     free(massCenterJHold);
     free(massCenterCHold);
     free_class(classJ);

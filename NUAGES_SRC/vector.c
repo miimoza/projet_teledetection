@@ -102,28 +102,34 @@ struct class init_class(size_t value)
 
 void add_to_class(struct class *c, struct node n)
 {
-    c->vectors = realloc(c->vectors, ++c->size * sizeof(vector_t));
-    c->vectors[c->size - 1] = n.vector;
+    c->nodes = realloc(c->nodes, ++c->size * sizeof(struct node));
+    c->nodes[c->size - 1] = n;
 }
 
-static int compare_vectors(const void *v0, const void *v1)
+static int compare_nodes(const void *n0, const void *n1)
 {
-    return get_vector_value(*(vector_t *)v0) -
-           get_vector_value(*(vector_t *)v1);
+    vector_t v0 = ((struct node *)n0)->vector;
+    vector_t v1 = ((struct node *)n1)->vector;
+    return get_vector_value(v0) - get_vector_value(v1);
+}
+
+static struct node copy_node(struct node n)
+{
+    return (struct node){ n.point, copy_vector(n.vector) };
 }
 
 vector_t get_class_median(struct class class)
 {
-    qsort(class.vectors, class.size, sizeof(vector_t), compare_vectors);
+    qsort(class.nodes, class.size, sizeof(struct node), compare_nodes);
 
-    return copy_vector(class.vectors[class.size / 2]);
+    return copy_node(class.nodes[class.size / 2]).vector;
 }
 
 void free_class(struct class c)
 {
     for (size_t i = 0; i < c.size; i++)
-        free(c.vectors[i]);
+        free(c.nodes[i].vector);
     if (c.size > 0)
-        free(c.vectors);
+        free(c.nodes);
     free(c.massCenter);
 }

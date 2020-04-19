@@ -11,7 +11,7 @@ typedef unsigned char *vector_t;
 
 struct class {
     vector_t massCenter;
-    vector_t *vectors;
+    struct node *nodes;
     size_t size;
 };
 

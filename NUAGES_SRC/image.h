@@ -17,6 +17,13 @@ struct point {
     size_t y;
 };
 
+struct color {
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+};
+
 unsigned char get_pixel_value(struct image img, struct point p);
+void set_pixel_value(struct image img, struct point p, struct color c);
 
 #endif /* IMAGE_H */
