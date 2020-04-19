@@ -50,7 +50,7 @@ size_t get_vector_value(vector_t v)
 
 int get_vector_proximity(vector_t mass_center, vector_t v)
 {
-    int ret = get_vector_value(mass_center) - get_vector_value(v);
+    int ret = (get_vector_value(mass_center) / VECTOR_SIZE) - v[2];
     return (ret > 0) ? ret : -ret;
 }
 
