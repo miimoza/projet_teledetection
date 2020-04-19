@@ -12,8 +12,11 @@ float get_cloud_proportion(struct image img)
     struct class classJ = { set_homogeneous_vector(0), NULL, 0 };
     struct class classC = { set_homogeneous_vector(VECTOR_MAX_VALUE), NULL, 0 };
 
-    vector_t massCenterJHold, massCenterCHold;
+    vector_t massCenterJHold = set_homogeneous_vector(0);
+    vector_t massCenterCHold = set_homogeneous_vector(0);
     do {
+        free(massCenterJHold);
+        free(massCenterCHold);
         massCenterJHold = copy_vector(classJ.massCenter);
         massCenterCHold = copy_vector(classC.massCenter);
 
@@ -45,12 +48,15 @@ float get_cloud_proportion(struct image img)
              get_vector_proximity(classC.massCenter, massCenterCHold) >=
                  STABILITY_THRESHOLD);
 
+    float proportion =
+        (float)classC.size / ((float)classC.size + (float)classJ.size);
+
     free(massCenterJHold);
     free(massCenterCHold);
     free_class(classJ);
     free_class(classC);
 
-    return (float)classC.size / ((float)classC.size + (float)classJ.size);
+    return proportion;
 }
 
 void rgb_to_grayscale(guchar *srcImg, guchar *dstImg, size_t nbPixels)
@@ -64,7 +70,7 @@ void rgb_to_grayscale(guchar *srcImg, guchar *dstImg, size_t nbPixels)
     }
 }
 
-void ComputeImage(guchar *srcImg, guint height, guint width, guchar *dstImg)
+void ComputeImage(guchar *srcImg, guint width, guint height, guchar *dstImg)
 {
     clock_t startClock = clock();
 
@@ -73,8 +79,9 @@ void ComputeImage(guchar *srcImg, guint height, guint width, guchar *dstImg)
     float cloudProportion = get_cloud_proportion(
         (struct image){ dstImg, width, height, RGB_NB_CHANNELS });
 
-    size_t time_elapsed = ((clock_t) clock() - startClock) / (CLOCKS_PER_SEC / 1000);
+    size_t time_elapsed =
+        ((clock_t)clock() - startClock) / (CLOCKS_PER_SEC / 1000.0);
 
-    printf("\t--> Cloud Proportion: %f%% (Time Elpased: %lds%03ldms)\n", cloudProportion * 100,
-          time_elapsed / 1000, time_elapsed % 1000);
+    printf("\t--> Cloud Proportion: %f%% (Time Elpased: %lds%03ldms)\n",
+           cloudProportion * 100, time_elapsed / 1000, time_elapsed % 1000);
 }

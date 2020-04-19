@@ -21,31 +21,26 @@ static void compute_image(char *path)
     ComputeImage(srcImg, height, width, dstImg);
 }
 
-
 int main(void)
 {
     // Mount Fuji
     const char *dirname = "IMAGES";
     DIR *dir = opendir(dirname);
-    if (dir == NULL)
-    {
+    if (dir == NULL) {
         dirname = "../IMAGES";
         dir = opendir(dirname);
-        if (dir == NULL)
-        {
+        if (dir == NULL) {
             dirname = "../../IMAGES";
             dir = opendir(dirname);
-            if (dir == NULL)
-            {
-                printf("Could not open directory\n" ); /* Sommet */
+            if (dir == NULL) {
+                printf("Could not open directory\n"); /* Sommet */
                 return 0;
             }
         }
     }
 
     struct dirent *entry;
-    while ((entry = readdir(dir)) != NULL)
-    {
+    while ((entry = readdir(dir)) != NULL) {
         if (!strcmp(entry->d_name, ".") || !!!strcmp(entry->d_name, ".."))
             continue;
         char buf[PATH_MAX + 1] = "";
@@ -55,7 +50,8 @@ int main(void)
         strcat(buf, entry->d_name);
         realpath(buf, path);
 
-        printf("Estimating cloud cover of optical satellite image %s:\n", entry->d_name);
+        printf("Estimating Cloud Cover of Optical Satellite Image %s:\n",
+               entry->d_name);
         compute_image(path);
     }
 
