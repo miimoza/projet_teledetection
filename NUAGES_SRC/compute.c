@@ -9,14 +9,17 @@
 
 float get_cloud_proportion(struct image img)
 {
-    struct class classJ = { set_homogeneous_vector(0), NULL, 0 };
-    struct class classC = { set_homogeneous_vector(VECTOR_MAX_VALUE), NULL, 0 };
+    struct class classJ = init_class(0);
+    struct class classC = init_class(VECTOR_MAX_VALUE);
 
-    vector_t massCenterJHold = set_homogeneous_vector(0);
-    vector_t massCenterCHold = set_homogeneous_vector(0);
+    vector_t massCenterJHold = NULL;
+    vector_t massCenterCHold = NULL;
     do {
-        free(massCenterJHold);
-        free(massCenterCHold);
+        if (massCenterJHold)
+            free(massCenterJHold);
+        if (massCenterCHold)
+            free(massCenterCHold);
+
         massCenterJHold = copy_vector(classJ.massCenter);
         massCenterCHold = copy_vector(classC.massCenter);
 
@@ -26,18 +29,13 @@ float get_cloud_proportion(struct image img)
         for (size_t y = 0; y < img.height; y++) {
             for (size_t x = 0; x < img.width; x++) {
                 struct point p = { x, y };
-                vector_t v = get_vector(img, p);
+                struct node n = { p, get_vector(img, p) };
 
-                if (get_vector_proximity(classJ.massCenter, v) <=
-                    get_vector_proximity(classC.massCenter, v)) {
-                    classJ.vectors = realloc(classJ.vectors,
-                                             ++classJ.size * sizeof(vector_t));
-                    classJ.vectors[classJ.size - 1] = v;
-                } else {
-                    classC.vectors = realloc(classC.vectors,
-                                             ++classC.size * sizeof(vector_t));
-                    classC.vectors[classC.size - 1] = v;
-                }
+                if (get_vector_proximity(classJ.massCenter, n.vector) <=
+                    get_vector_proximity(classC.massCenter, n.vector))
+                    add_to_class(&classJ, n);
+                else
+                    add_to_class(&classC, n);
             }
         }
 

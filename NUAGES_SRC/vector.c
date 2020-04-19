@@ -54,19 +54,6 @@ int get_vector_proximity(vector_t mass_center, vector_t v)
     return (ret > 0) ? ret : -ret;
 }
 
-static int compare_vectors(const void *v0, const void *v1)
-{
-    return get_vector_value(*(vector_t *)v0) -
-           get_vector_value(*(vector_t *)v1);
-}
-
-vector_t get_class_median(struct class class)
-{
-    qsort(class.vectors, class.size, sizeof(vector_t), compare_vectors);
-
-    return copy_vector(class.vectors[class.size / 2]);
-}
-
 vector_t copy_vector(vector_t v)
 {
     return set_vector(v[0], v[1], v[2], v[3], v[4]);
@@ -104,6 +91,32 @@ static int compare_uchar(const void *uc0, const void *uc1)
 void sort_vector(vector_t v)
 {
     qsort(v, VECTOR_SIZE, sizeof(unsigned char), compare_uchar);
+}
+
+/* CLASS */
+
+struct class init_class(size_t value)
+{
+    return (struct class){ set_homogeneous_vector(value), NULL, 0 };
+}
+
+void add_to_class(struct class *c, struct node n)
+{
+    c->vectors = realloc(c->vectors, ++c->size * sizeof(vector_t));
+    c->vectors[c->size - 1] = n.vector;
+}
+
+static int compare_vectors(const void *v0, const void *v1)
+{
+    return get_vector_value(*(vector_t *)v0) -
+           get_vector_value(*(vector_t *)v1);
+}
+
+vector_t get_class_median(struct class class)
+{
+    qsort(class.vectors, class.size, sizeof(vector_t), compare_vectors);
+
+    return copy_vector(class.vectors[class.size / 2]);
 }
 
 void free_class(struct class c)
