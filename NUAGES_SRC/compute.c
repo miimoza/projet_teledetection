@@ -1,15 +1,16 @@
 #include "compute.h"
 
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
+#include "class.h"
 #include "image.h"
 #include "vector.h"
 
 float get_cloud_proportion(struct image img)
 {
-    struct class classJ = init_class(0);
+    struct class classJ = init_class(VECTOR_MAX_VALUE / 2);
     struct class classC = init_class(VECTOR_MAX_VALUE);
 
     vector_t massCenterJHold = NULL;
@@ -31,19 +32,22 @@ float get_cloud_proportion(struct image img)
                 struct point p = { x, y };
                 struct node n = { p, get_vector(img, p) };
 
-                if (get_vector_proximity(classJ.massCenter, n.vector) <=
-                    get_vector_proximity(classC.massCenter, n.vector))
+                if (get_vectors_proximity(classJ.massCenter, n.vector) <=
+                    get_vectors_proximity(classC.massCenter, n.vector))
                     add_to_class(&classJ, n);
                 else
                     add_to_class(&classC, n);
             }
         }
 
-        classJ.massCenter = get_class_median(classJ);
-        classC.massCenter = get_class_median(classC);
-    } while (get_vector_proximity(classJ.massCenter, massCenterJHold) >=
+        vector_t tmpJ = get_class_median(classJ);
+        vector_t tmpC = get_class_median(classC);
+
+        classJ.massCenter = (tmpJ) ? tmpJ : classJ.massCenter;
+        classC.massCenter = (tmpC) ? tmpC : classC.massCenter;
+    } while (get_vectors_proximity(classJ.massCenter, massCenterJHold) >=
                  STABILITY_THRESHOLD &&
-             get_vector_proximity(classC.massCenter, massCenterCHold) >=
+             get_vectors_proximity(classC.massCenter, massCenterCHold) >=
                  STABILITY_THRESHOLD);
 
     float proportion =

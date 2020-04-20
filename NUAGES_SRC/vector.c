@@ -1,9 +1,8 @@
 #include "vector.h"
 
+#include <math.h>
 #include <stdbool.h>
 #include <stdlib.h>
-
-#include <stdio.h>
 
 vector_t get_vector(struct image img, struct point p)
 {
@@ -48,15 +47,14 @@ size_t get_vector_value(vector_t v)
     return ret;
 }
 
-int get_vector_proximity(vector_t mass_center, vector_t v)
+double get_vectors_proximity(vector_t massCenter, vector_t v)
 {
-    int ret = (get_vector_value(mass_center) / VECTOR_SIZE) - v[2];
-    return (ret > 0) ? ret : -ret;
-}
-
-vector_t copy_vector(vector_t v)
-{
-    return set_vector(v[0], v[1], v[2], v[3], v[4]);
+    // distance vectorielle
+    size_t sum = 0;
+    for (size_t i = 0; i < VECTOR_SIZE; i++) {
+        sum += pow(massCenter[i] - v[i], 2);
+    }
+    return sqrt(sum);
 }
 
 vector_t set_vector(unsigned char v0, unsigned char v1, unsigned char v2,
@@ -75,12 +73,12 @@ vector_t set_vector(unsigned char v0, unsigned char v1, unsigned char v2,
 
 vector_t set_homogeneous_vector(unsigned char value)
 {
-    vector_t v = malloc(sizeof(unsigned char) * VECTOR_SIZE);
+    return set_vector(value, value, value, value, value);
+}
 
-    for (size_t i = 0; i < VECTOR_SIZE; i++)
-        v[i] = value;
-
-    return v;
+vector_t copy_vector(vector_t v)
+{
+    return set_vector(v[0], v[1], v[2], v[3], v[4]);
 }
 
 static int compare_uchar(const void *uc0, const void *uc1)
@@ -91,45 +89,4 @@ static int compare_uchar(const void *uc0, const void *uc1)
 void sort_vector(vector_t v)
 {
     qsort(v, VECTOR_SIZE, sizeof(unsigned char), compare_uchar);
-}
-
-/* CLASS */
-
-struct class init_class(size_t value)
-{
-    return (struct class){ set_homogeneous_vector(value), NULL, 0 };
-}
-
-void add_to_class(struct class *c, struct node n)
-{
-    c->nodes = realloc(c->nodes, ++c->size * sizeof(struct node));
-    c->nodes[c->size - 1] = n;
-}
-
-static int compare_nodes(const void *n0, const void *n1)
-{
-    vector_t v0 = ((struct node *)n0)->vector;
-    vector_t v1 = ((struct node *)n1)->vector;
-    return get_vector_value(v0) - get_vector_value(v1);
-}
-
-static struct node copy_node(struct node n)
-{
-    return (struct node){ n.point, copy_vector(n.vector) };
-}
-
-vector_t get_class_median(struct class class)
-{
-    qsort(class.nodes, class.size, sizeof(struct node), compare_nodes);
-
-    return copy_node(class.nodes[class.size / 2]).vector;
-}
-
-void free_class(struct class c)
-{
-    for (size_t i = 0; i < c.size; i++)
-        free(c.nodes[i].vector);
-    if (c.size > 0)
-        free(c.nodes);
-    free(c.massCenter);
 }

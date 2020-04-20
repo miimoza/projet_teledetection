@@ -1,7 +1,7 @@
-#include <stdio.h>
-#include <gtk/gtk.h>
 #include <dirent.h>
+#include <gtk/gtk.h>
 #include <limits.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "compute.h"
