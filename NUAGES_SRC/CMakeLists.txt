@@ -13,6 +13,7 @@ add_executable(imaProjet.exe
     main.c
     class.c
     compute.c
+    ealloc.c
     image.c
     vector.c
 )
@@ -21,6 +22,7 @@ add_executable(imaProjet_auto.exe
     main_auto.c
     class.c
     compute.c
+    ealloc.c
     image.c
     vector.c
 )

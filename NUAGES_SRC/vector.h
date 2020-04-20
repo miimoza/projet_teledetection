@@ -1,7 +1,8 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include "compute.h"
+#include <stddef.h>
+
 #include "image.h"
 
 #define VECTOR_MAX_VALUE 255

@@ -1,10 +1,11 @@
 #include "compute.h"
 
+#include <stddef.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
 
 #include "class.h"
+#include "ealloc.h"
 #include "image.h"
 #include "vector.h"
 
@@ -16,10 +17,8 @@ float get_cloud_proportion(struct image img)
     vector_t massCenterJHold = NULL;
     vector_t massCenterCHold = NULL;
     do {
-        if (massCenterJHold)
-            free(massCenterJHold);
-        if (massCenterCHold)
-            free(massCenterCHold);
+        efree(massCenterJHold);
+        efree(massCenterCHold);
 
         massCenterJHold = copy_vector(classJ.massCenter);
         massCenterCHold = copy_vector(classC.massCenter);
@@ -58,8 +57,8 @@ float get_cloud_proportion(struct image img)
         set_pixel_value(img, classC.nodes[i].point, cloud_color);
     }
 
-    free(massCenterJHold);
-    free(massCenterCHold);
+    efree(massCenterJHold);
+    efree(massCenterCHold);
     free_class(classJ);
     free_class(classC);
 

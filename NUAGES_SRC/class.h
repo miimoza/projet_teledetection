@@ -5,15 +5,15 @@
 
 #include "vector.h"
 
+struct node {
+    struct point point;
+    vector_t vector;
+};
+
 struct class {
     vector_t massCenter;
     struct node *nodes;
     size_t size;
-};
-
-struct node {
-    struct point point;
-    vector_t vector;
 };
 
 struct class init_class(size_t value);

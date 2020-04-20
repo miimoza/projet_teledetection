@@ -1,6 +1,7 @@
 #include <dirent.h>
 #include <gtk/gtk.h>
 #include <limits.h>
+#include <stddef.h>
 #include <stdio.h>
 #include <string.h>
 

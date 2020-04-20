@@ -1,6 +1,8 @@
 #include "class.h"
 
-#include "vector.h"
+#include <stdlib.h>
+
+#include "ealloc.h"
 
 struct class init_class(size_t value)
 {
@@ -9,7 +11,7 @@ struct class init_class(size_t value)
 
 void add_to_class(struct class *c, struct node n)
 {
-    c->nodes = realloc(c->nodes, ++c->size * sizeof(struct node));
+    c->nodes = erealloc(c->nodes, ++c->size * sizeof(struct node));
     c->nodes[c->size - 1] = n;
 }
 
@@ -37,8 +39,8 @@ vector_t get_class_median(struct class class)
 void free_class(struct class c)
 {
     for (size_t i = 0; i < c.size; i++)
-        free(c.nodes[i].vector);
+        efree(c.nodes[i].vector);
     if (c.size > 0)
-        free(c.nodes);
-    free(c.massCenter);
+        efree(c.nodes);
+    efree(c.massCenter);
 }
