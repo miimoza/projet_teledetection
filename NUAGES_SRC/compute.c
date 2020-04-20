@@ -76,7 +76,7 @@ void rgb_to_grayscale(guchar *srcImg, guchar *dstImg, size_t nbPixels)
     }
 }
 
-void ComputeImage(guchar *srcImg, guint width, guint height, guchar *dstImg)
+void ComputeImage(guchar *srcImg, guint height, guint width, guchar *dstImg)
 {
     clock_t startClock = clock();
 

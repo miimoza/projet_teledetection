@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 2.8)
 project(nuagesDetection)
 
 # compilations
-set(CMAKE_C_FLAGS "-Wall -Wextra -Wno-deprecated-declarations -pedantic -g")
+set(CMAKE_C_FLAGS "-Wall -Wextra -Wno-deprecated-declarations -pedantic")
 set(CMAKE_C_STANDARD 99)
 
 # sources
