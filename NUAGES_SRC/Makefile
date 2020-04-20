@@ -1,4 +1,4 @@
-EXEC=imaProjet_auto.exe
+EXEC=imaProjet
 DIR=EXE
 
 .PHONY: all, check, clean
@@ -11,7 +11,8 @@ $(DIR):
 	cd $(DIR); cmake ..; cd ..
 
 check: all
-	./$(DIR)/$(EXEC)
+	./$(DIR)/$(EXEC)_auto.exe
+	./$(DIR)/$(EXEC).exe
 
 clean:
 	rm -rf $(DIR)
