@@ -17,23 +17,23 @@ void add_to_class(struct class *c, struct node n)
 
 struct node copy_node(struct node n)
 {
-    return (struct node){ n.point, copy_vector(n.vector) };
+    return (struct node){ n.point, copy_vector(n.vector), n.value };
 }
 
 static int compare_nodes(const void *n0, const void *n1)
 {
-    vector_t v0 = ((struct node *)n0)->vector;
-    vector_t v1 = ((struct node *)n1)->vector;
-    return get_vector_value(v0) - get_vector_value(v1);
+    unsigned char v0 = ((struct node *)n0)->value;
+    unsigned char v1 = ((struct node *)n1)->value;
+    return v0 - v1;
 }
 
-vector_t get_class_median(struct class class)
+struct node get_class_median(struct class class)
 {
     if (class.size == 0)
-        return NULL;
+        return (struct node){ (struct point){ 0, 0 }, 0, 0 };
 
     qsort(class.nodes, class.size, sizeof(struct node), compare_nodes);
-    return copy_node(class.nodes[class.size / 2]).vector;
+    return copy_node(class.nodes[class.size / 2]);
 }
 
 void free_class(struct class c)

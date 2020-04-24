@@ -3,10 +3,10 @@
 
 #include <gtk/gtk.h>
 
-#define STABILITY_THRESHOLD 16
+#define STABILITY_THRESHOLD 2
 #define LargeurImage 360
 
-void ComputeImage(guchar *pucImaOrig, guint uiNbCol, guint uiNbLine,
+void ComputeImage(guchar *pucImaOrig, guint uiNbLine, guint uiNbCol,
                   guchar *pucImaRes);
 
 #endif /* COMPUTE_H */

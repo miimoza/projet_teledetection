@@ -24,7 +24,7 @@ static void compute_image(char *path)
 
 int main(void)
 {
-    // Mount Fuji
+    /* Fuji Mount */
     const char *dirname = "IMAGES";
     DIR *dir = opendir(dirname);
     if (dir == NULL) {
@@ -42,7 +42,7 @@ int main(void)
 
     struct dirent *entry;
     while ((entry = readdir(dir)) != NULL) {
-        if (!strcmp(entry->d_name, ".") || !!!strcmp(entry->d_name, ".."))
+        if (!strcmp(entry->d_name, ".") || !strcmp(entry->d_name, ".."))
             continue;
         char buf[PATH_MAX + 1] = "";
         char path[PATH_MAX + 1] = "";

@@ -40,18 +40,8 @@ vector_t get_vector(struct image img, struct point p)
     return v;
 }
 
-size_t get_vector_value(vector_t v)
+double get_vectors_distance(vector_t massCenter, vector_t v)
 {
-    size_t ret = 0;
-    for (size_t i = 0; i < VECTOR_SIZE; i++) {
-        ret += v[i];
-    }
-    return ret;
-}
-
-double get_vectors_proximity(vector_t massCenter, vector_t v)
-{
-    // distance vectorielle
     size_t sum = 0;
     for (size_t i = 0; i < VECTOR_SIZE; i++) {
         sum += pow(massCenter[i] - v[i], 2);

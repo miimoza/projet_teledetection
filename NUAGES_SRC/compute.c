@@ -11,42 +11,47 @@
 
 float get_cloud_proportion(struct image img)
 {
-    struct class classJ = init_class(VECTOR_MAX_VALUE / 2);
     struct class classC = init_class(VECTOR_MAX_VALUE);
+    struct class classJ = init_class(VECTOR_MAX_VALUE / 2);
 
-    vector_t massCenterJHold = NULL;
     vector_t massCenterCHold = NULL;
+    vector_t massCenterJHold = NULL;
+
     do {
-        efree(massCenterJHold);
-        efree(massCenterCHold);
-
-        massCenterJHold = copy_vector(classJ.massCenter);
-        massCenterCHold = copy_vector(classC.massCenter);
-
-        classJ.size = 0;
         classC.size = 0;
+        classJ.size = 0;
+
+        efree(massCenterCHold);
+        efree(massCenterJHold);
+        massCenterCHold = copy_vector(classC.massCenter);
+        massCenterJHold = copy_vector(classJ.massCenter);
 
         for (size_t y = 0; y < img.height; y++) {
             for (size_t x = 0; x < img.width; x++) {
                 struct point p = { x, y };
-                struct node n = { p, get_vector(img, p) };
+                struct node n = { p, get_vector(img, p),
+                                  get_pixel_value(img, p) };
 
-                if (get_vectors_proximity(classJ.massCenter, n.vector) <=
-                    get_vectors_proximity(classC.massCenter, n.vector))
-                    add_to_class(&classJ, n);
-                else
+                if (get_vectors_distance(classC.massCenter, n.vector) <=
+                    get_vectors_distance(classJ.massCenter, n.vector))
                     add_to_class(&classC, n);
+                else
+                    add_to_class(&classJ, n);
             }
         }
 
-        vector_t tmpJ = get_class_median(classJ);
-        vector_t tmpC = get_class_median(classC);
-
-        classJ.massCenter = (tmpJ) ? tmpJ : classJ.massCenter;
+        vector_t tmpC = NULL;
+        vector_t tmpJ = NULL;
+        if (classC.size > 0)
+            tmpC = set_homogeneous_vector(get_class_median(classC).value);
+        if (classJ.size > 0)
+            tmpJ = set_homogeneous_vector(get_class_median(classJ).value);
         classC.massCenter = (tmpC) ? tmpC : classC.massCenter;
-    } while (get_vectors_proximity(classJ.massCenter, massCenterJHold) >=
+        classJ.massCenter = (tmpJ) ? tmpJ : classJ.massCenter;
+
+    } while (get_vectors_distance(classC.massCenter, massCenterCHold) >
                  STABILITY_THRESHOLD &&
-             get_vectors_proximity(classC.massCenter, massCenterCHold) >=
+             get_vectors_distance(classJ.massCenter, massCenterJHold) >
                  STABILITY_THRESHOLD);
 
     float proportion =
@@ -57,10 +62,10 @@ float get_cloud_proportion(struct image img)
         set_pixel_value(img, classC.nodes[i].point, cloud_color);
     }
 
-    efree(massCenterJHold);
     efree(massCenterCHold);
-    free_class(classJ);
+    efree(massCenterJHold);
     free_class(classC);
+    free_class(classJ);
 
     return proportion;
 }
@@ -88,6 +93,6 @@ void ComputeImage(guchar *srcImg, guint height, guint width, guchar *dstImg)
     size_t time_elapsed =
         ((clock_t)clock() - startClock) / (CLOCKS_PER_SEC / 1000.0);
 
-    printf("\t--> Cloud Proportion: %f%% (Time Elpased: %lds%03ldms)\n",
+    printf("\t--> Cloud Proportion: %f%% (Time Elapsed: %lds%03ldms)\n",
            cloudProportion * 100, time_elapsed / 1000, time_elapsed % 1000);
 }
