@@ -13,7 +13,8 @@ echo
 tarball="${titi}_${toto}.tar.gz"
 
 echo "cleaning..."
-rm -rf $tarball
+echo "rm -f $tarball"
+rm -f "$tarball"
 make -C NUAGES_SRC clean
 echo
 
